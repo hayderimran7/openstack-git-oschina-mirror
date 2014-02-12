@@ -1,0 +1,42 @@
+#+TITLE: OpenStack github repo git.oschina.net mirror
+
+Several months ago when I tried hard to install openstack in my laptop
+virtualbox, I had met many many problems due to my poor local network. So I
+write some little bash script and mirrored 30+ openstack repos from github to
+https://git.oschina.net/. I just forgot this, until one day a guy sent me an
+email asking why the mirror was stopped. Then I realized that the mirror may be
+useful for some chinese users, so I took some more time to revive this
+openstack git oschina mirror.
+
+This project provide a simple ruby script which mirrors all openstack developer
+repos from github to https://git.oschina.net/.
+
+You can view all openstack repos from [[http://git.openstack.org/cgit][openstack git repo browser]]. For general
+developers, there're 75 repos under https://github.com/openstack and 10 repos
+under https://github.com/openstack-dev, which may be useful for you. All of
+these repos has been synced to https://git.oschina.net/:
+- https://git.oschina.net/openstack
+- https://git.oschina.net/openstack-dev
+
+So chinese users can just download [[http://devstack.org/][devstack]], modify =GIT_BASE= in [[https://github.com/openstack-dev/devstack/blob/master/stackrc][stackrc]], then
+you can get all openstack source code from git oschina mirror.
+
+The git oschina mirror will sync 3~5 times a day. Any problem you just open a
+github [[https://github.com/xiaohanyu/openstack-git-oschina-mirror/issues][issue]], please.
+
+If you want to build your own mirror, here's some reference steps:
+
+- Find some vps that you have the root account and then create two new
+  accounts: =openstack= and =openstack-dev=.
+- Do some ssh-key settings in your local "gitlab".
+- This [[https://github.com/xiaohanyu/openstack-git-oschina-mirror/blob/master/oschina_mirror.rb][mirror script]] need ruby 2.x. It doesn't work with ruby 1.8 nor ruby 1.9
+  due to a bug of ruby "net/http" lib. You can get ruby 2.x under Ubuntu with
+  this [[https://launchpad.net/~brightbox/%2Barchive/ruby-ng-experimental][ppa]].
+- Init the repos with =openstack= and =openstack-dev= user, this will clone all
+  repos https://github.com/openstack and https://github.com/openstack-dev
+  - =ruby2.1 openstack-git-oschina-mirror/oschina_mirror.rb openstack init=
+  - =ruby2.1 openstack-git-oschina-mirror/oschina_mirror.rb openstack-dev init=
+- Update the repo and push it to your(oschina) mirror, you can add this step to
+  crontab job.
+  - =ruby2.1 openstack-git-oschina-mirror/oschina_mirror.rb openstack update=
+  - =ruby2.1 openstack-git-oschina-mirror/oschina_mirror.rb openstack-dev update=

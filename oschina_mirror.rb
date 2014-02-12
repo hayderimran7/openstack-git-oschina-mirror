@@ -10,7 +10,7 @@ end
 def init_github_org_repos(org_repos)
   org_repos.each do |repo|
     FileUtils.mkpath(repo['full_name'])
-    `git clone #{repo['ssh_url']} #{repo['full_name']}`
+    `git clone #{repo['git_url']} #{repo['full_name']}`
     pwd = FileUtils.pwd
     FileUtils.chdir(repo['full_name'])
     `git remote add oschina git@git.oschina.net:#{repo['full_name']}`
@@ -23,6 +23,7 @@ def update_github_org_repos(org_repos)
     pwd = FileUtils.pwd
     FileUtils.chdir(repo['full_name'])
     `git remote update origin`
+    `git merge origin/master`
     `git push --all oschina`
     `git push --tags oschina`
     FileUtils.chdir(pwd)
